@@ -7,6 +7,7 @@ import {
   locationsByAppointmentType,
   LocationsByAppointmentType,
 } from './dataConstants';
+import { AvailableLocationsByAppoinmentType } from 'src/periodic-checker/periodic-checker.service';
 
 export type AppointmentAvailability = {
   locationKey: string;
@@ -103,5 +104,33 @@ export class AppointmentsService {
       link: url,
       slug: appoinmentLocation.slug,
     };
+  }
+
+  public filterClosestAppointmentAvailability(
+    availableLocationsByAppoinmentType: AvailableLocationsByAppoinmentType[],
+  ): AvailableLocationsByAppoinmentType[] {
+    const result: AvailableLocationsByAppoinmentType[] = [];
+    for (const availableLocations of availableLocationsByAppoinmentType) {
+      const closestAppointments = availableLocations.availableSlots.reduce(
+        (previousValue, currentValue) => {
+          const appointmentDate = dayjs(currentValue.date);
+          const currentDate = dayjs();
+          const diff = appointmentDate.diff(currentDate, 'day');
+
+          if (diff < 30) previousValue.push(currentValue);
+
+          return previousValue;
+        },
+        [] as AppointmentAvailability[],
+      );
+
+      if (closestAppointments.length > 0)
+        result.push({
+          ...availableLocations,
+          availableSlots: closestAppointments,
+        });
+    }
+
+    return result;
   }
 }

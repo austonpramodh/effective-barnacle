@@ -1,6 +1,6 @@
 import { Controller, Get } from '@nestjs/common';
 import { Cron } from '@nestjs/schedule';
-import { NotificationsService } from 'src/notifications/notifications.service';
+import { AppointmentsService } from 'src/appointments/appointments.service';
 import {
   AvailableLocationsByAppoinmentType,
   PeriodicCheckerService,
@@ -10,7 +10,7 @@ import {
 export class PeriodicCheckerController {
   constructor(
     private readonly periodicCheckerService: PeriodicCheckerService,
-    private readonly notificationsService: NotificationsService,
+    private readonly appoinmentService: AppointmentsService,
   ) {}
 
   @Get('check')
@@ -18,16 +18,24 @@ export class PeriodicCheckerController {
     success: true;
     message: string;
     data: AvailableLocationsByAppoinmentType[];
+    unfilteredAppoinments: AvailableLocationsByAppoinmentType[];
   }> {
     const availableLocationsByAppoinmentType =
       await this.periodicCheckerService.checkForNewAppointmentTimings();
 
+    // filter out locations that have already been notified
+    const filteredAppointments =
+      this.appoinmentService.filterClosestAppointmentAvailability(
+        availableLocationsByAppoinmentType,
+      );
+
     await this.periodicCheckerService.sendAppointmentAvailabilityNotifications(
-      availableLocationsByAppoinmentType,
+      filteredAppointments,
     );
 
     return {
-      data: availableLocationsByAppoinmentType,
+      data: filteredAppointments,
+      unfilteredAppoinments: availableLocationsByAppoinmentType,
       success: true,
       message: 'Successfully checked for new appointment timings',
     };
@@ -38,8 +46,14 @@ export class PeriodicCheckerController {
     const availableLocationsByAppoinmentType =
       await this.periodicCheckerService.checkForNewAppointmentTimings();
 
+    // filter out locations that have already been notified
+    const filteredAppointments =
+      this.appoinmentService.filterClosestAppointmentAvailability(
+        availableLocationsByAppoinmentType,
+      );
+
     await this.periodicCheckerService.sendAppointmentAvailabilityNotifications(
-      availableLocationsByAppoinmentType,
+      filteredAppointments,
     );
   }
 }

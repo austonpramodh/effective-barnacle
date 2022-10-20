@@ -8,5 +8,7 @@ services:
       dockerfile: Dockerfile
     env_file:
       - .env
+    environment:
+      - NODE_ENV=production
     ports:
       - "3055:3000"
