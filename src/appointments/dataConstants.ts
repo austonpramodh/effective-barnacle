@@ -74,11 +74,6 @@ export const locationsByAppointmentType: LocationsByAppointmentType[] = [
         slug: 'wayne',
         locationKey: '202',
       },
-      {
-        locationName: 'SOUTH PLAINFIELD - PERMITS/LICENSE',
-        slug: 'south-plainfield',
-        locationKey: '193',
-      },
     ],
   },
   {
