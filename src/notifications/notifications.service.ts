@@ -2,7 +2,7 @@ import { HttpService } from '@nestjs/axios';
 import { Cache } from 'cache-manager';
 import { CACHE_MANAGER, Inject, Injectable } from '@nestjs/common';
 import { firstValueFrom } from 'rxjs';
-import { SlackBotToken } from 'src/appointments/dataConstants';
+import { ConfigService } from '@nestjs/config';
 
 type SlackChannelsResponse = {
   ok: boolean;
@@ -18,11 +18,14 @@ export class NotificationsService {
   constructor(
     private readonly httpService: HttpService,
     @Inject(CACHE_MANAGER) private cacheManager: Cache,
+    private readonly configService: ConfigService,
   ) {}
 
   private async getSlackChannels(
     skipCache?: boolean,
   ): Promise<SlackChannelsResponse> {
+    const slackBotToken = this.configService.get<string>('SLACK_BOT_TOKEN');
+
     const cachedChannels = await this.cacheManager.get<SlackChannelsResponse>(
       'slackChannels',
     );
@@ -34,7 +37,7 @@ export class NotificationsService {
         `https://slack.com/api/conversations.list`,
         {
           headers: {
-            Authorization: `Bearer ${SlackBotToken}`,
+            Authorization: `Bearer ${slackBotToken}`,
           },
         },
       ),
@@ -50,6 +53,8 @@ export class NotificationsService {
   }
 
   private async createSlackChannel(channelName: string): Promise<any> {
+    const slackBotToken = this.configService.get<string>('SLACK_BOT_TOKEN');
+
     const request = this.httpService.post(
       'https://slack.com/api/conversations.create',
       {
@@ -57,7 +62,7 @@ export class NotificationsService {
       },
       {
         headers: {
-          Authorization: `Bearer ${SlackBotToken}`,
+          Authorization: `Bearer ${slackBotToken}`,
         },
       },
     );
@@ -86,6 +91,8 @@ export class NotificationsService {
     channel: string,
     message: string,
   ): Promise<void> {
+    const slackBotToken = this.configService.get<string>('SLACK_BOT_TOKEN');
+
     // Check if channel exists, if not create one
     await this.createSlackChannelIfDoesntExist(channel);
 
@@ -97,7 +104,7 @@ export class NotificationsService {
       },
       {
         headers: {
-          Authorization: `Bearer ${SlackBotToken}`,
+          Authorization: `Bearer ${slackBotToken}`,
         },
       },
     );

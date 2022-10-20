@@ -33,13 +33,13 @@ export class PeriodicCheckerController {
     };
   }
 
-  // @Cron('0 * * * * *')
-  // async checkForNewAppointmentTimingsJob() {
-  //   const availableLocationsByAppoinmentType =
-  //     await this.periodicCheckerService.checkForNewAppointmentTimings();
+  @Cron('*/5 * * * *')
+  async checkForNewAppointmentTimingsJob() {
+    const availableLocationsByAppoinmentType =
+      await this.periodicCheckerService.checkForNewAppointmentTimings();
 
-  //   await this.periodicCheckerService.sendAppointmentAvailabilityNotifications(
-  //     availableLocationsByAppoinmentType,
-  //   );
-  // }
+    await this.periodicCheckerService.sendAppointmentAvailabilityNotifications(
+      availableLocationsByAppoinmentType,
+    );
+  }
 }

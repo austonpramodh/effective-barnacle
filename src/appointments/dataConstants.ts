@@ -1,10 +1,3 @@
-export const SlackBotToken =
-  // 'xoxb-4017857211505-4221108883874-fuuPQeGHl8NqY4FKRUCUh0Uv'; // Testing
-  'xoxb-4251155139108-4234167679575-AWkJtjgYdVwhJhT6lmSapqT6'; // Production
-
-if (SlackBotToken === undefined)
-  throw new Error('SlackBotToken is undefined, please set it in .env');
-
 export type Location = {
   locationKey: string;
   locationName: string;

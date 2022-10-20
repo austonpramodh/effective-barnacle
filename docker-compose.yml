@@ -1,0 +1,12 @@
+version: "3.7"
+
+services:
+  app:
+    image: "nj-mvc-slack-bot"
+    build:
+      context: .
+      dockerfile: Dockerfile
+    env_file:
+      - .env
+    ports:
+      - "3055:3000"
