@@ -11,9 +11,25 @@ export type LocationsByAppointmentType = {
   locations: Location[];
 };
 
+const testData: LocationsByAppointmentType[] = [
+  {
+    appointmentTypeKey: '252',
+    name: 'AUTO ROAD TEST',
+    slug: 'auto-road-test',
+    locations: [
+      {
+        locationName: 'NEWARK - NON-CDL ROAD TEST',
+        slug: 'newark-test',
+        locationKey: '420',
+      },
+    ],
+  },
+];
+
 export const locationsByAppointmentType: LocationsByAppointmentType[] =
-  process.env.NODE_ENV === 'production'
-    ? [
+  process.env.NODE_ENV !== 'production'
+    ? testData
+    : [
         {
           appointmentTypeKey: '15',
           name: 'INITIAL PERMIT (BEFORE KNOWLEDGE TEST)',
@@ -133,6 +149,11 @@ export const locationsByAppointmentType: LocationsByAppointmentType[] =
               slug: 'bayonne',
               locationKey: '210',
             },
+            {
+              locationName: 'NEWARK - NON-DRIVER ID',
+              slug: 'newark',
+              locationKey: '223',
+            },
           ],
         },
         {
@@ -154,20 +175,6 @@ export const locationsByAppointmentType: LocationsByAppointmentType[] =
               locationName: 'WAYNE - NON-CDL ROAD TEST',
               slug: 'wayne',
               locationKey: '424',
-            },
-          ],
-        },
-      ]
-    : [
-        {
-          appointmentTypeKey: '252',
-          name: 'AUTO ROAD TEST',
-          slug: 'auto-road-test',
-          locations: [
-            {
-              locationName: 'NEWARK - NON-CDL ROAD TEST',
-              slug: 'newark-test',
-              locationKey: '420',
             },
           ],
         },
