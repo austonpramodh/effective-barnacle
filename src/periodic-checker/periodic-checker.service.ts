@@ -115,4 +115,23 @@ export class PeriodicCheckerService {
       );
     }
   }
+
+  // Create all the channels that donot exist
+  public async createSlackChannels(): Promise<void> {
+    console.log('Creating slack channels if they do not exist');
+
+    const locationsByAppointmentType =
+      this.appointmentsService.getAllAppointmentTypesWithLocation();
+
+    for (const appoinmentType of locationsByAppointmentType) {
+      for (const location of appoinmentType.locations) {
+        const channelString = `${appoinmentType.slug}-${location.slug}`;
+        await this.notificationsService.createSlackChannelIfDoesntExist(
+          channelString,
+        );
+      }
+    }
+
+    console.log('Done creating all the slack channels');
+  }
 }

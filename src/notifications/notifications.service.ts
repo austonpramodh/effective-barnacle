@@ -72,7 +72,7 @@ export class NotificationsService {
     return response.data;
   }
 
-  private async createSlackChannelIfDoesntExist(
+  public async createSlackChannelIfDoesntExist(
     channelName: string,
   ): Promise<void> {
     // Check if channel exists, if not create one

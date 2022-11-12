@@ -19,7 +19,7 @@ const testData: LocationsByAppointmentType[] = [
     locations: [
       {
         locationName: 'NEWARK - NON-CDL ROAD TEST',
-        slug: 'newark-test',
+        slug: 'newark-testing-dev',
         locationKey: '420',
       },
     ],
@@ -153,6 +153,16 @@ export const locationsByAppointmentType: LocationsByAppointmentType[] =
               locationName: 'NEWARK - NON-DRIVER ID',
               slug: 'newark',
               locationKey: '223',
+            },
+            {
+              locationName: 'PATERSON - NON-DRIVER ID',
+              slug: 'paterson',
+              locationKey: '227',
+            },
+            {
+              locationName: 'ELIZABETH - NON-DRIVER ID',
+              slug: 'elizabeth',
+              locationKey: '262',
             },
           ],
         },
