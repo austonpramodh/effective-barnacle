@@ -11,6 +11,8 @@ export type LocationsByAppointmentType = {
   locations: Location[];
 };
 
+export const MAX_DAYS_TO_APPOINTMENT = 30;
+
 const testData: LocationsByAppointmentType[] = [
   {
     appointmentTypeKey: '252',

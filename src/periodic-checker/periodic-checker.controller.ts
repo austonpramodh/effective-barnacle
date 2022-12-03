@@ -1,6 +1,7 @@
 import { Controller, Get } from '@nestjs/common';
 import { Cron } from '@nestjs/schedule';
 import { AppointmentsService } from 'src/appointments/appointments.service';
+import { MAX_DAYS_TO_APPOINTMENT } from 'src/appointments/dataConstants';
 import {
   AvailableLocationsByAppoinmentType,
   PeriodicCheckerService,
@@ -27,6 +28,7 @@ export class PeriodicCheckerController {
     const filteredAppointments =
       this.appoinmentService.filterClosestAppointmentAvailability(
         availableLocationsByAppoinmentType,
+        MAX_DAYS_TO_APPOINTMENT,
       );
 
     await this.periodicCheckerService.sendAppointmentAvailabilityNotifications(
@@ -50,6 +52,7 @@ export class PeriodicCheckerController {
     const filteredAppointments =
       this.appoinmentService.filterClosestAppointmentAvailability(
         availableLocationsByAppoinmentType,
+        MAX_DAYS_TO_APPOINTMENT,
       );
 
     await this.periodicCheckerService.sendAppointmentAvailabilityNotifications(

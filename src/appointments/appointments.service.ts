@@ -88,7 +88,8 @@ export class AppointmentsService {
       .trim(); // ie. "West Deptford - License or Non Driver ID Renewal"
     const location = $('.setup-panel li.nav-item:nth-child(2)').text().trim();
 
-    const formatedDate = dayjs(date).format('MM-DD-YYYY');
+    // format the date like this: "Mon 2nd Mar 2021"
+    const formatedDate = dayjs(date).format('ddd, MMM D, YYYY');
 
     if (!firstTimeSlotAvailable) {
       return null;
@@ -108,6 +109,7 @@ export class AppointmentsService {
 
   public filterClosestAppointmentAvailability(
     availableLocationsByAppoinmentType: AvailableLocationsByAppoinmentType[],
+    maxDiffInDays: number,
   ): AvailableLocationsByAppoinmentType[] {
     const result: AvailableLocationsByAppoinmentType[] = [];
     for (const availableLocations of availableLocationsByAppoinmentType) {
@@ -117,7 +119,7 @@ export class AppointmentsService {
           const currentDate = dayjs();
           const diff = appointmentDate.diff(currentDate, 'day');
 
-          if (diff < 30) previousValue.push(currentValue);
+          if (diff < maxDiffInDays) previousValue.push(currentValue);
 
           return previousValue;
         },
