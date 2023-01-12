@@ -1,4 +1,4 @@
-import { CACHE_MANAGER, Inject, Injectable } from '@nestjs/common';
+import { CACHE_MANAGER, Inject, Injectable, Logger } from '@nestjs/common';
 import {
   AppointmentAvailability,
   AppointmentsService,
@@ -16,6 +16,8 @@ export type AvailableLocationsByAppoinmentType = {
 
 @Injectable()
 export class PeriodicCheckerService {
+  private readonly logger = new Logger(PeriodicCheckerService.name);
+
   constructor(
     private readonly appointmentsService: AppointmentsService,
     private readonly notificationsService: NotificationsService,
@@ -82,7 +84,7 @@ export class PeriodicCheckerService {
 
         if (cachedHash === appointmentSlotHash) {
           // Don't send a notification
-          console.log(
+          this.logger.log(
             `Appointment slot already cached: ${appointmentSlotHash} - ${appointmentLocation.locationName} - ${appointmentLocation.appointmentTypeName} - ${appointmentLocation.date} - ${appointmentLocation.time}`,
           );
           continue;
@@ -118,7 +120,7 @@ export class PeriodicCheckerService {
 
   // Create all the channels that donot exist
   public async createSlackChannels(): Promise<void> {
-    console.log('Creating slack channels if they do not exist');
+    this.logger.log('Creating slack channels if they do not exist');
 
     const locationsByAppointmentType =
       this.appointmentsService.getAllAppointmentTypesWithLocation();
@@ -132,6 +134,6 @@ export class PeriodicCheckerService {
       }
     }
 
-    console.log('Done creating all the slack channels');
+    this.logger.log('Done creating all the slack channels');
   }
 }

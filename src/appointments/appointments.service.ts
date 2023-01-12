@@ -83,10 +83,16 @@ export class AppointmentsService {
       navItemValues[navItemKeys[i]] = `${$(el).text().trim()} `;
     });
 
+    // ie. "1. License or Non Driver ID Renewal"
     const appointmentType = $('.setup-panel li.nav-item:nth-child(1)')
       .text()
-      .trim(); // ie. "West Deptford - License or Non Driver ID Renewal"
-    const location = $('.setup-panel li.nav-item:nth-child(2)').text().trim();
+      .trim()
+      .replace('1. ', '');
+    // ie. "2. West Deptford - License or Non Driver ID Renewal"
+    const locationName = $('.setup-panel li.nav-item:nth-child(2)')
+      .text()
+      .trim()
+      .replace('2. ', '');
 
     // format the date like this: "Mon 2nd Mar 2021"
     const formatedDate = dayjs(date).format('ddd, MMM D, YYYY');
@@ -99,7 +105,7 @@ export class AppointmentsService {
       date: formatedDate,
       appointmentTypeKey: appointmentTypeKey,
       locationKey: locationKey,
-      locationName: location,
+      locationName: locationName,
       time: firstTimeSlotAvailable,
       appointmentTypeName: appointmentType,
       link: url,
